@@ -5,6 +5,7 @@ import (
 	"os"
 	"log"
 	"math/rand"
+	"time"
 )
 
 var words *[]string
@@ -35,6 +36,7 @@ func getAllWords() *[]string {
 func randomShuffle(N uint) *[]string {
 	var words_set = make([]string, len(*words))
 	copy(words_set, *words)
+	rand.Seed(time.Now().UnixNano())
 	//rand.Shuffle takes a swap function as the second parameter
 	rand.Shuffle(len(words_set), func(i int, j int) {words_set[i], words_set[j] = words_set[j], words_set[i]})
 	words_set = words_set[:N]
