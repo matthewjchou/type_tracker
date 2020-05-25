@@ -94,17 +94,19 @@ func handleKeystroke(letter string, special bool, specialChar uint) {
 			fmt.Println("Space")
 			fmt.Printf("mistakes: %d\nletters: %s\n", tracker.mistakesCount, string(tracker.word[tracker.index - 1]))
 			space()
+		default:
+			return
 		}
 	} else {
-		
 		if (letter == string(tracker.word[tracker.index]) && tracker.mistakesCount == 0) {
 			fmt.Println("correct")
 			tracker.index++
 			if tracker.index == tracker.length {
-				fmt.Println("correct word")
+				fmt.Println("correct word\n")
 				tracker.complete = true
 			} 
 		} else {
+			fmt.Println("HERE")
 			tracker.mistakesCount++
 		}
 	}
@@ -119,11 +121,11 @@ func keyEvent(entry *gtk.Entry, event *gdk.Event) {
 	if val, ok := keyMap[keyVal]; ok {
 		fmt.Println("special char")
 		handleKeystroke("", true, val)
+	} else {
+		letter := string(keyVal)
+		fmt.Println(letter)
+		handleKeystroke(letter, false, 0)
 	}
-
-	letter := string(keyVal)
-	fmt.Println(letter)
-	handleKeystroke(letter, false, 0)
 }
 
 func start() {
