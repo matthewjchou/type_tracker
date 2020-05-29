@@ -77,7 +77,7 @@ func backspace() {
 	}
 }
 
-func handleKeystroke(letter string, special bool, specialChar uint) {
+func handleKeystroke(letter string, special bool, specialChar uint, entry *gtk.Entry) {
 	tracker.keystrokeCount++
 	if special {
 		switch specialChar {
@@ -87,6 +87,7 @@ func handleKeystroke(letter string, special bool, specialChar uint) {
 		case 1:
 			fmt.Println("Shift")
 			//Ignore this basically?
+			return
 		case 2:
 			fmt.Println("Backspace")
 			backspace()
@@ -94,6 +95,7 @@ func handleKeystroke(letter string, special bool, specialChar uint) {
 			fmt.Println("Space")
 			fmt.Printf("mistakes: %d\nletters: %s\n", tracker.mistakesCount, string(tracker.word[tracker.index - 1]))
 			space()
+			(*entry).SetText("")
 		default:
 			return
 		}
@@ -110,7 +112,7 @@ func handleKeystroke(letter string, special bool, specialChar uint) {
 			tracker.mistakesCount++
 		}
 	}
-	fmt.Println("mistakes:", tracker.mistakesCount)
+	// fmt.Println("mistakes:", tracker.mistakesCount)
 
 }
 
@@ -120,11 +122,11 @@ func keyEvent(entry *gtk.Entry, event *gdk.Event) {
 	fmt.Println("keyVaL: ", keyVal)
 	if val, ok := keyMap[keyVal]; ok {
 		fmt.Println("special char")
-		handleKeystroke("", true, val)
+		handleKeystroke("", true, val, entry)
 	} else {
 		letter := string(keyVal)
 		fmt.Println(letter)
-		handleKeystroke(letter, false, 0)
+		handleKeystroke(letter, false, 0, entry)
 	}
 }
 
